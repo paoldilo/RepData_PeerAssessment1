@@ -14,8 +14,8 @@ fulldata <- read.csv("activity.csv",header = T)
 ```
 
 2. Process/transform the data (if necessary) into a format suitable for your analysis   
-The date column is transformed from Factor to Date to ease later processing.
-The result is a 17568 ibservation dataframe with 3 columns.
+The date column is transformed from Factor to Date to ease later processing.   
+The result is a 17568 observations dataframe with 3 columns.
 
 ```r
 fulldata$date <- as.Date(fulldata$date,format="%Y-%m-%d")
@@ -56,20 +56,11 @@ hist(result$steps,col = "blue",breaks = 10,main = "Histogram of total number of 
 
 
 ```r
-median(result$steps)
+result_median<-median(result$steps)
+result_mean<-mean(result$steps)
 ```
-
-```
-## [1] 10765
-```
-
-```r
-mean(result$steps)
-```
-
-```
-## [1] 10766.19
-```
+Median:   10765   
+Mean;     10766.19
 
 ## What is the average daily activity pattern?
 
@@ -117,8 +108,8 @@ The maximum value and the interval number with the maximun value of average dail
 ## [1] 2304
 ```
 2. Devise a strategy for filling in all of the missing values in the dataset. 
-I decided to substitute NA with the average of the 5 minute interval of all days.   
-So I merge the full data frame with NA togheter with the result from the previous steps representing the average of the five minute interval amont all days.
+I decided to substitute `NA` with the average of the 5 minute interval of all days.   
+So I merge the full data frame with `NA` togheter with the result from the previous steps representing the average of the five minute interval amont all days.
 
 
 ```r
@@ -128,45 +119,25 @@ So I merge the full data frame with NA togheter with the result from the previou
 
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.  
 
-Then the new dataset "newfulldata" is created substituting NA on the first column (steps)
+Then the new dataset `newfulldata` is created substituting `NA` on the first column (steps)
 
 
 ```r
      newfulldata[is.na(newfulldata),][,1] <- temp[order(as.Date(temp$date.x,format="%Y-%m-%d")),][,4]
-```
-     
-
-```r
-     newfulldata <- data.table(newfulldata)
-     result3 <- newfulldata[,lapply(.SD,sum),by=date]
 ```
 
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?   
 
 
 ```r
-     hist(result3$steps,breaks = 10, col = "green", main = "Histogram of total number of steps per day without NA",xlab = "Total Number of steps", ylab = "Number of days (Frequency)",,xlim =c(0,25000))
+newfulldata <- data.table(newfulldata)
+result3 <- newfulldata[,lapply(.SD,sum),by=date]
+hist(result3$steps,breaks = 10, col = "green", main = "Histogram of total number of steps per day without NA",xlab = "Total Number of steps", ylab = "Number of days (Frequency)",,xlim =c(0,25000))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
 
-```r
-     median(result3$steps)
-```
-
-```
-## [1] 10766.19
-```
-
-```r
-     mean(result3$steps)
-```
-
-```
-## [1] 10766.19
-```
-
-The mean doesn't change significantly from the calculated ones from the first step. That is because I used the averages to substitute the NA and thus the means remain the same. The median changes slightly because more observations have been added and that might alter slightly the median.
+The mean is 10766.19 and doesn't change significantly from the calculated ones from the first step. That is because I used the averages to substitute the NA and thus the means remain the same. The median is 10766.19 and changes slightly because more observations have been added and that might alter slightly the median.
 
 
 ```r
@@ -184,7 +155,10 @@ mean(result3$steps) - mean(result$steps)
 ```
 ## [1] 0
 ```
+
+
 ## Are there differences in activity patterns between weekdays and weekends?
+   
 1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 
 I add a column with the weekday values, then I use string function "sub" to substitute weekdays with only two values ("weekday","weekend").   
@@ -218,13 +192,14 @@ These two variables are then plotted on a panel plot.
    
 
 ```r
+library(lattice)
 par(mfrow=c(2,1))
 par(mar=c(4, 3, 3, 2))
 plot(result_weekday$interval,result_weekday$steps,type = "l", col="blue", main = "Mean Steps by Interval for Weekday",xlab = "Intervals", ylab = "Average steps")
 plot(result_weekend$interval,result_weekend$steps,type = "l", col="red", main = "Mean Steps by Interval for Weekends" ,xlab = "Intervals", ylab = "Average steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-14-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-13-1.png) 
 
 The plot and the following summary states that the average number of steps is higher on weekends rather than during weekdays. 
 
