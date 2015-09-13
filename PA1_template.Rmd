@@ -135,7 +135,7 @@ str(newfulldata2$weekdays)
 
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
 
-I transform the dataframe to a data table and create two subsets with the mean of the steps of the 5 minute intervals during weekdays and weekends.   
+I transformed the dataframe to a data table and create two subsets with the mean of the steps of the 5 minute intervals during weekdays and weekends.   
 
 ```{r}
 newfulldata2 <- data.table(newfulldata2)
@@ -143,10 +143,9 @@ result_weekday <- newfulldata2[newfulldata2$weekdays=="weekday",lapply(.SD,mean)
 result_weekend <- newfulldata2[newfulldata2$weekdays=="weekend",lapply(.SD,mean),by=interval, .SDcols=c("steps")]
 ```
    
-These two variables are then plotted on a panel plot.   
+These two variables are then plotted on a panel plot, using the standard plotting function (type="l").
    
 ```{r fig.height=5, fig.width=6}
-library(lattice)
 par(mfrow=c(2,1))
 par(mar=c(4, 3, 3, 2))
 plot(result_weekday$interval,result_weekday$steps,type = "l", col="blue", main = "Mean Steps by Interval for Weekday",xlab = "Intervals", ylab = "Average steps")
