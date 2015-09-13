@@ -45,14 +45,6 @@ The Data Table Package is loaded to analyze the data. All NAs are removed from t
 
 ```r
 library("data.table")
-```
-
-```
-## data.table 1.9.4  For help type: ?data.table
-## *** NB: by=.EACHI is now explicit. See README to restore previous behaviour.
-```
-
-```r
 filteredata <- data.table(fulldata[!is.na(fulldata$steps),])
 result <- filteredata[,lapply(.SD,sum),by=date]
 ```

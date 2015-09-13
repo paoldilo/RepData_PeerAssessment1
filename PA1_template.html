@@ -237,13 +237,7 @@ The Data Table Package is loaded to analyze the data. All NAs are removed from t
 </ol>
 
 <pre><code class="r">library(&quot;data.table&quot;)
-</code></pre>
-
-<pre><code>## data.table 1.9.4  For help type: ?data.table
-## *** NB: by=.EACHI is now explicit. See README to restore previous behaviour.
-</code></pre>
-
-<pre><code class="r">filteredata &lt;- data.table(fulldata[!is.na(fulldata$steps),])
+filteredata &lt;- data.table(fulldata[!is.na(fulldata$steps),])
 result &lt;- filteredata[,lapply(.SD,sum),by=date]
 </code></pre>
 
