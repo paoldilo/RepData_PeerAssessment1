@@ -39,7 +39,7 @@ filteredata <- data.table(fulldata[!is.na(fulldata$steps),])
 result <- filteredata[,lapply(.SD,sum),by=date]
 ```
    
-2. Make a histogram of the total number of steps taken each day
+2. Make a histogram of the total number of steps taken each day, Iv've chosen a 10 interval histogram to better show the data distribution.   
    
 ```{r hist, fig.width=5, fig.height=4}
 hist(result$steps,col = "blue",breaks = 10,main = "Histogram of total number of steps per day",xlab = "Total Number of steps", ylab = "Number of days (Frequency)",xlim =c(0,25000))
@@ -57,7 +57,8 @@ Mean;     `r prettyNum(result_mean)`
 ## What is the average daily activity pattern?
 
 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)   
-To calculate the average activity pattern I aggregate the data by interval calculating the mean number of steps. The average activity pattern is plotted against the intervals.
+To calculate the average activity pattern I aggregate the data by interval calculating the mean number of steps. The average activity pattern is plotted against the intervals.   
+
 ```{r plot, fig.width=5, fig.height=4}
 result2 <- filteredata[,lapply(.SD,mean),by=interval]
 plot(x = result2$interval,y=result2$steps,type = "l", col="blue", main = "Average Daily Activiy Pattern", xlab = "Interval", ylab = "Average Number of Steps")
@@ -72,6 +73,9 @@ The maximum value and the interval number with the maximun value of average dail
      result2$interval[result2$steps==max(result2$steps)]
 ```
 
+5-minute interval with maximum number of steps: `r result2$interval[result2$steps==max(result2$steps)]`   
+
+
 ## Imputing missing values
    
 1. Calculate and report the total number of missing values in the dataset 
@@ -79,9 +83,10 @@ The maximum value and the interval number with the maximun value of average dail
 ```{r}
      sum(is.na(fulldata$steps))
 ```
+   
 2. Devise a strategy for filling in all of the missing values in the dataset. 
 I decided to substitute `NA` with the average of the 5 minute interval of all days.   
-So I merge the full data frame with `NA` togheter with the result from the previous steps representing the average of the five minute interval amont all days.
+So I merged the full data frame togheter with the result from the previous steps representing the average of the five minute interval among all days.
 
 ```{r}
      newfulldata<- fulldata
@@ -116,7 +121,7 @@ mean(result3$steps) - mean(result$steps)
    
 1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 
-I add a column with the weekday values, then I use string function "sub" to substitute weekdays with only two values ("weekday","weekend").   
+I added a column with the weekday values, then I use string function "sub" to substitute weekdays with only two values ("weekday","weekend").   
 Then I transform the column to factor.
 
 ```{r}
@@ -130,7 +135,8 @@ str(newfulldata2$weekdays)
 
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
 
-I transform the dataframe to a data table and create two subsets with the mean of the steps of the 5 minute intervals during weekdays and weekends.
+I transform the dataframe to a data table and create two subsets with the mean of the steps of the 5 minute intervals during weekdays and weekends.   
+
 ```{r}
 newfulldata2 <- data.table(newfulldata2)
 result_weekday <- newfulldata2[newfulldata2$weekdays=="weekday",lapply(.SD,mean),by=interval, .SDcols=c("steps")]
@@ -153,4 +159,3 @@ The plot and the following summary states that the average number of steps is hi
 summary(result_weekday$steps)
 summary(result_weekend$steps)
 ```
-
