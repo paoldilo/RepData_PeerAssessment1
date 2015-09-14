@@ -146,7 +146,7 @@ These two variables are then plotted on a panel plot, using the lattice plotting
    
 ```{r fig.height=5, fig.width=6}
 library(lattice)
-xyplot(steps~interval | weekdays, data = result_weekdays,type = 'l', xlab = 'Interval', ylab = 'Number of Steps',layout = c(1,2))
+xyplot(steps~interval | weekdays, data = result_weekdays,type = 'l',layout = c(1,2), xlab = 'Interval', ylab = 'Average Number of Steps')
 ```
 
 The plot and the following summary states that the average number of steps is higher on weekends rather than during weekdays, but the average peak value is reached on weekdays. 

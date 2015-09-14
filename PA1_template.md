@@ -204,7 +204,7 @@ These two variables are then plotted on a panel plot, using the lattice plotting
 
 ```r
 library(lattice)
-xyplot(steps~interval | weekdays, data = result_weekdays,type = 'l', xlab = 'Interval', ylab = 'Number of Steps',layout = c(1,2))
+xyplot(steps~interval | weekdays, data = result_weekdays,type = 'l',layout = c(1,2), xlab = 'Interval', ylab = 'Average Number of Steps')
 ```
 
 ![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13-1.png) 
