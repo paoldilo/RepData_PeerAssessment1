@@ -139,22 +139,19 @@ I transformed the dataframe to a data table and create two subsets with the mean
 
 ```{r}
 newfulldata2 <- data.table(newfulldata2)
-result_weekday <- newfulldata2[newfulldata2$weekdays=="weekday",lapply(.SD,mean),by=interval, .SDcols=c("steps")]
-result_weekend <- newfulldata2[newfulldata2$weekdays=="weekend",lapply(.SD,mean),by=interval, .SDcols=c("steps")]
+result_weekdays<- newfulldata2[,lapply(.SD,mean),by=c("interval","weekdays")]
 ```
    
-These two variables are then plotted on a panel plot, using the standard plotting function (type="l").
+These two variables are then plotted on a panel plot, using the lattice plotting function (type="l").
    
 ```{r fig.height=5, fig.width=6}
-par(mfrow=c(2,1))
-par(mar=c(4, 3, 3, 2))
-plot(result_weekday$interval,result_weekday$steps,type = "l", col="blue", main = "Mean Steps by Interval for Weekday",xlab = "Intervals", ylab = "Average steps")
-plot(result_weekend$interval,result_weekend$steps,type = "l", col="red", main = "Mean Steps by Interval for Weekends" ,xlab = "Intervals", ylab = "Average steps")
+library(lattice)
+xyplot(steps~interval | weekdays, data = result_weekdays,type = 'l', xlab = 'Interval', ylab = 'Number of Steps',layout = c(1,2))
 ```
 
-The plot and the following summary states that the average number of steps is higher on weekends rather than during weekdays. 
+The plot and the following summary states that the average number of steps is higher on weekends rather than during weekdays, but the average peak value is reached on weekdays. 
 
 ```{r}
-summary(result_weekday$steps)
-summary(result_weekend$steps)
+summary(result_weekdays[result_weekdays$weekdays=="weekday",]$steps)
+summary(result_weekdays[result_weekdays$weekdays=="weekend",]$steps)
 ```
